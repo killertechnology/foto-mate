@@ -21,7 +21,7 @@ const tree = dirTree(creds.LOCAL_FOLDER, {extensions:/\.*$/}, (item, PATH) => {
 	list.add([item.path]); //console.log(item.path);
 });
 
-var _uploadFiles = false;
+var _uploadFiles = true;
 AWS.config.update({accessKeyId: creds.access_key, secretAccessKey: creds.secret_access_key, region: 'us-east-1'});
 console.log("UPLOADING IS SET TO: " + _uploadFiles)
 showMissingFiles();
@@ -59,7 +59,7 @@ function showMissingFiles() {
 		  		showMissingFiles();
 		  } 
 		  else {  
-		    s3.getSignedUrl('getObject', params);
+		    //s3.getSignedUrl('getObject', params);
 		    
 		    if ((_thisIteration % 100)==0)
 		    	console.log('working... ' + _thisIteration + ' files processed. Current: ' + _localPath);

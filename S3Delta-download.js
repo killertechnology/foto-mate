@@ -17,17 +17,18 @@ var nameList = [];
 var _nodeIteration = -1;
 
 
-AWS.config.update({accessKeyId: creds.access_key, secretAccessKey: creds.secret_access_key, region: 'us-east-1'});
+AWS.config.update({accessKeyId: creds.access_key, secretAccessKey: creds.secret_access_key, region: 'us-west-2'});
 
 var _downloadFiles = false;
-getSubFolders('')
+getSubFolders('/')
 
 //Split all folders into an array list
-_subfolderList = buildFolderList();
+//_subfolderList = buildFolderList();
 
 function buildFolderList(){
 	delay(3000).then(() => {//
 		_allFolders = _allFolders.substring(0,_allFolders.length-1)
+		console.log("AKKFIKDERS: " + _allFolders)
 		nameList = _allFolders.split('|');
 		
 		for (var i = 0;i<nameList.length;i++)
@@ -49,13 +50,14 @@ function getSubFolders(_prefix){
 		  MaxKeys: 1000,
 		  Prefix: _prefix
 		}, function (error, response) {
+			console.log('RESPONSE: ' + response.Contents)
 			response.Contents.map(
-		  	function (obj) { 
-		  		_thisFolder = obj.Key;	  		//
-		  		console.log('FOLDER: ' + _thisFolder);
-		  		return obj.Key; 
-		  	}
-		  )
+			  	function (obj) { 
+			  		_thisFolder = obj.Key;	  		//
+			  		console.log('FOLDER: ' + _thisFolder);
+			  		return obj.Key; 
+			  	}
+		  	)
 			_subfolderList = response.CommonPrefixes;
 			for (var i = 0;i<_subfolderList.length;i++){
 				if (_subfolderList[i].Prefix!=null){
@@ -75,8 +77,9 @@ function getSubFolders(_prefix){
 function getNodeFiles(){
 
 	delay(2000).then(() => {//
-		_thisIteration=-1;
+		_thisIteration=0;
 		_nodeIteration++;
+
 		_node = nameList[_nodeIteration]
 		console.log("\r\nEXTRACTING NODE " + _nodeIteration + ": " + _node)
  	
