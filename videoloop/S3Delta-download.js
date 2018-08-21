@@ -20,10 +20,10 @@ var _nodeIteration = -1;
 AWS.config.update({accessKeyId: creds.access_key, secretAccessKey: creds.secret_access_key, region: 'us-west-2'});
 
 var _downloadFiles = false;
-getSubFolders('/')
+getSubFolders('/photos/')
 
 //Split all folders into an array list
-//_subfolderList = buildFolderList();
+_subfolderList = buildFolderList();
 
 function buildFolderList(){
 	delay(3000).then(() => {//
@@ -50,11 +50,12 @@ function getSubFolders(_prefix){
 		  MaxKeys: 1000,
 		  Prefix: _prefix
 		}, function (error, response) {
-			console.log('RESPONSE: ' + response.Contents)
+			console.log('RESPONSE: ' + JSON.stringify(response))
+			console.log('ERROR: ' + error)
 			response.Contents.map(
 			  	function (obj) { 
 			  		_thisFolder = obj.Key;	  		//
-			  		console.log('FOLDER: ' + _thisFolder);
+			  		console.log('GETTUBG FOLDER: ' + _thisFolder);
 			  		return obj.Key; 
 			  	}
 		  	)

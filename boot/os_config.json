@@ -1,0 +1,13 @@
+{
+ "description" : "A port of Debian Stretch for the Raspberry Pi (minimal version)",
+ "flavour" : "Raspbian Lite",
+ "imagefolder" : "/settings/os/Raspbian_Lite",
+ "keyboard" : "gb",
+ "language" : "en",
+ "partitions" : [
+"/dev/mmcblk0p6",
+"/dev/mmcblk0p7"
+ ],
+ "release_date" : "2018-04-18",
+ "videomode" : 0
+}
