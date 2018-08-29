@@ -20,7 +20,7 @@ var _nodeIteration = -1;
 AWS.config.update({accessKeyId: creds.access_key, secretAccessKey: creds.secret_access_key, region: 'us-west-2'});
 
 var _downloadFiles = false;
-getSubFolders('/photos/')
+getSubFolders('/')
 
 //Split all folders into an array list
 _subfolderList = buildFolderList();

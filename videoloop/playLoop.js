@@ -260,83 +260,87 @@ function playImages(photoString){
 	var _img2ResizeAttr = " -a";
 	var _img3ResizeAttr = " -a";
 
-	var _img0data;
-	var _img1data;
-	var _img2data;
-	var _img3data;
 
 	var _img0err;
 	var _img1err;
 	var _img2err;
 	var _img3err;
+	var _isPortrait = false;
 	
 	shell.cd('/home/pi/videoloop');
 	console.log('playing IMAGE loop');
 	
 
-		try {
+	try {
 	        new ExifImage({ image : photoString[0] }, function (error, exifData0) {
 				dimensions = sizeOf(photoString[0]);
 				if ((dimensions.width <1000) || (dimensions.height <750) || (dimensions.width>dimensions.height)) { _img0ResizeAttr = "-fitwidth" }
 				if (exifData0 !=null){	
-					_img0data = exifData0.image.Orientation;
-					if (_img0data != 1) { rewriteImagebyOrientation(exifData0,0); } 
+					if (exifData0.image.Orientation != 1) { rewriteImagebyOrientation(exifData0,0); } 
+				}
+				else if (dimensions.height>dimensions.width) { 
+					rewriteImageby90Degrees(0);
 				}
 				_img0err = error +'.0';
 
 		    });
         	//	console.log('Video too long. Ignored')
+	
+
+			delay(200).then(() => {//
 				
-	    } catch (ex) {
-	        //console.log('Error encountered:', selectedPath + ex);
-	        //shell.cd('sh reset.sh');
-	    } finally {
-	       
-	       
-	    }
+		    	new ExifImage({ image : photoString[1] }, function (error, exifData1) {
+					dimensions = sizeOf(photoString[1]);
+					if ((dimensions.width <1000) || (dimensions.height <750) || (dimensions.width>dimensions.height)) { _img1ResizeAttr = "-fitwidth" }
+					if (exifData1 !=null){	
+						if (exifData1.image.Orientation != 1) { rewriteImagebyOrientation(exifData1,1); }
+					}
+					else if (dimensions.height>dimensions.width) { 
+						rewriteImageby90Degrees(1);
+					}
+					_img1err = error +'.1';
+			    });
 
-    	
-	
-
-	delay(200).then(() => {//
+			    new ExifImage({ image : photoString[2] }, function (error, exifData2) {
+						dimensions = sizeOf(photoString[2]);
+						if ((dimensions.width <1000) || (dimensions.height <750) || (dimensions.width>dimensions.height)) { _img2ResizeAttr = "-fitwidth" }
+						if (exifData2 !=null){
+							if (exifData2.image.Orientation != 1) { rewriteImagebyOrientation(exifData2,2); }
+						}
+						else if (dimensions.height>dimensions.width) { 
+							rewriteImageby90Degrees(2);
+						}
+						_img2err = error +'.2';
+				    });
 			
-	    	new ExifImage({ image : photoString[1] }, function (error, exifData1) {
-				dimensions = sizeOf(photoString[1]);
-				if ((dimensions.width <1000) || (dimensions.height <750) || (dimensions.width>dimensions.height)) { _img1ResizeAttr = "-fitwidth" }
-				if (exifData1 !=null){	
-					_img1data = exifData1.image.Orientation;
-					if (_img1data != 1) { rewriteImagebyOrientation(exifData1,1); }
-				}
-				_img1err = error +'.1';
-		    });
 
-		    new ExifImage({ image : photoString[2] }, function (error, exifData2) {
-					dimensions = sizeOf(photoString[2]);
-					if ((dimensions.width <1000) || (dimensions.height <750) || (dimensions.width>dimensions.height)) { _img2ResizeAttr = "-fitwidth" }
-					if (exifData2 !=null){
-						_img2data = exifData2.image.Orientation;
-						if (_img2data != 1) { rewriteImagebyOrientation(exifData2,2); }
-					}
-					_img2err = error +'.2';
-			    });
-		
+			}) ; 
 
-	}) ; 
+			delay(400).then(() => {
 
-		delay(400).then(() => {
+			    	new ExifImage({ image : photoString[3] }, function (error, exifData3) {
+						dimensions = sizeOf(photoString[3]);
+						if ((dimensions.width <1000) || (dimensions.height <750) || (dimensions.width>dimensions.height)) { _img3ResizeAttr = "-fitwidth" }
+						if (exifData3 !=null){
+							if (exifData3.image.Orientation != 1) { rewriteImagebyOrientation(exifData3,3); } 
+						}
+						else if (dimensions.height>dimensions.width) { 
+							rewriteImageby90Degrees(3);
+						}
+						_img3err = error +'.3';
+				    });
+		 	});
 
-		    	new ExifImage({ image : photoString[3] }, function (error, exifData3) {
-					dimensions = sizeOf(photoString[3]);
-					if ((dimensions.width <1000) || (dimensions.height <750) || (dimensions.width>dimensions.height)) { _img3ResizeAttr = "-fitwidth" }
-					if (exifData3 !=null){
-						_img3data = exifData3.image.Orientation;
-						if (_img3data != 1) { rewriteImagebyOrientation(exifData3,3); } 
-					}
-					_img3err = error +'.3';
-			    });
-			 });
+	} catch (ex) {
+        //console.log('Error encountered:', selectedPath + ex);
+        //shell.cd('sh reset.sh');
+    } finally {
+       
+       
+    }
 
-	
+
+
 	delay(200).then(() => {//
 
 		try {
@@ -441,6 +445,13 @@ function playImages(photoString){
 
 }
 
+
+function rewriteImageby90Degrees(slot){
+
+	//_thisExifData
+	shell.exec("convert " + photoString[slot] + " -rotate 90 " + photoString[slot].replace(".jpg","-rotated.jpg"));
+	photoString[slot] = photoString[slot].replace(".jpg","-rotated.jpg");
+}
 
 function rewriteImagebyOrientation(_thisExifData, slot){
 
