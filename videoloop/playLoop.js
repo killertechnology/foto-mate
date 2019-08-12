@@ -155,6 +155,15 @@ function loadVideos(){
 
 }
 
+function getRandomStart(duration){
+
+	var _startPoint = getRandomInt(2,(duration - 10));
+	return "00:00:" + _startPoint;
+}
+
+function getRandomInt(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
 
 //var omx = require('omxdirector');
 //omx.play(videoString, {loop: true });
@@ -171,7 +180,8 @@ function playVids(theseVideos){
 	
 		try {
 			_thisVideo = theseVideos[0].split('|');
-	       	if (_thisVideo[1] > 20) { _thisVidStartPos = "00:00:15";} else{ _thisVidStartPos="00:00:00" }
+
+			if (_thisVideo[1] > 15) { _thisVidStartPos=getRandomStart(_thisVideo[1]); }
 			_cmd = 'omxplayer -l ' + _thisVidStartPos + ' -o hdmi  ' + _thisVidScreenSize + _thisVideo[0]
 			console.log('starting video - ' +_cmd);
 			shell.exec(_cmd); 
@@ -185,8 +195,10 @@ function playVids(theseVideos){
 	    } finally {
 
 	    		try {
-					_thisVideo = theseVideos[1].split('|')
-					if (_thisVideo[1] > 20) { _thisVidStartPos = "00:00:15";} else{ _thisVidStartPos="00:00:00" }
+					_thisVideo = theseVideos[1].split('|');
+					
+
+					if (_thisVideo[1] > 15) { _thisVidStartPos=getRandomStart(_thisVideo[1]); }
 					_cmd = 'omxplayer -l ' + _thisVidStartPos + ' -o both  ' + _thisVidScreenSize + _thisVideo[0]
 					console.log('starting video - ' +_cmd);
 					shell.exec(_cmd); 
@@ -202,7 +214,7 @@ function playVids(theseVideos){
 			    	try {
 	       
 						_thisVideo = theseVideos[2].split('|')
-						if (_thisVideo[1] > 20) { _thisVidStartPos = "00:00:15";} else{ _thisVidStartPos="00:00:00" }
+						if (_thisVideo[1] > 15) { _thisVidStartPos=getRandomStart(_thisVideo[1]); }
 						_cmd = 'omxplayer -l ' + _thisVidStartPos + ' -o local  ' + _thisVidScreenSize + _thisVideo[0]
 						console.log('starting video - ' +_cmd);
 						shell.exec(_cmd); 
