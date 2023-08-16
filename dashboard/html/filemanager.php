@@ -40,10 +40,12 @@ span{
 	<tbody>
 	<?php
 
-	$di = new RecursiveDirectoryIterator('/home/pi/videoloop/photos/2014');
+	$di = new RecursiveDirectoryIterator('/home/pi/videoloop/photos');
+	$_filepath_ = '';
 	foreach (new RecursiveIteratorIterator($di) as $filename => $file) {
 	    //echo $filename . ' - ' . $file->getSize() . ' bytes <br/>';
-	    echo '<tr><th><img src='.$filename . ' height=25 width=25></th><th>'.str_replace('/home/pi/videoloop/photos/','',$filename).'</th><th>' . $file->getSize() . ' bytes </th><th>--</th>';
+	    $_filepath_ = 'photos/' . str_replace('/home/pi/videoloop/photos/','',$filename);
+	    echo '<tr><th><img src='.$_filepath_ . ' height=25 width=25></th><th>'.$_filepath_.'</th><th>' . $file->getSize() . ' bytes </th><th>--</th>';
 	}
 
 
